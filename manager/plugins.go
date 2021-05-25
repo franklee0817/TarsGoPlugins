@@ -50,11 +50,11 @@ func readCfg() error {
 }
 
 // Register 注册插件实例化方法
-func Register(name string, c PluginCreator) {
+func Register(c PluginCreator) {
 	if _, ok := plugins[c.Type()]; !ok {
 		plugins[c.Type()] = make(map[string]PluginCreator)
 	}
-	plugins[c.Type()][name] = c
+	plugins[c.Type()][c.Name()] = c
 }
 
 // GetPluginCreator 获取插件实例化方法
