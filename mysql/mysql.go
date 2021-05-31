@@ -68,16 +68,21 @@ func (m *clients) Setup(yamlCfg *yaml.Node) error {
 	Clients.mux.Lock()
 	defer Clients.mux.Unlock()
 	for instName, cfg := range cfgs {
-		connStr := fmt.Sprintf("%s:%s@(%s)/%s", cfg.User, cfg.Password, cfg.Address, cfg.DBName)
-		if len(cfg.Args) > 0 {
-			connStr += "?" + cfg.Args
-		}
-		Clients.Engines[instName], err = xorm.NewEngine("mysql", connStr)
+		Clients.Engines[instName], err = xorm.NewEngine("mysql", buildDSN(cfg))
 		if err != nil {
 			return err
 		}
 	}
 	return nil
+}
+
+func buildDSN(cfg config) string {
+	dsn := fmt.Sprintf("%s:%s@(%s)/%s", cfg.User, cfg.Password, cfg.Address, cfg.DBName)
+	if len(cfg.Args) > 0 {
+		dsn += "?" + cfg.Args
+	}
+
+	return dsn
 }
 
 // NewSession 创建一个新的MySQL 连接会话
@@ -98,8 +103,8 @@ func NewSession(instName string) (*xorm.Session, error) {
 		Clients.Engines[instName] = engine
 		return engine.NewSession(), nil
 	}
-
 	Clients.mux.RUnlock()
+
 	return engine.NewSession(), nil
 }
 
