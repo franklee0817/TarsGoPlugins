@@ -40,6 +40,7 @@ var cfgs map[string]config
 func init() {
 	once := new(sync.Once)
 	once.Do(func() {
+		cfgs = make(map[string]config)
 		if Clients == nil {
 			Clients = new(clients)
 			Clients.mux = new(sync.RWMutex)
