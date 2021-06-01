@@ -3,7 +3,7 @@ module github.com/franklee0817/TarsGoPlugins/es
 go 1.14
 
 require (
-	github.com/fortytw2/leaktest v1.3.0 // indirect
+	github.com/franklee0817/TarsGoPlugins/manager v0.0.0-20210601080237-77e28d7d4f96
 	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/olivere/elastic v6.2.35+incompatible

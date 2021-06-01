@@ -4,6 +4,7 @@ import (
 	"errors"
 	"sync"
 
+	"github.com/franklee0817/TarsGoPlugins/manager"
 	"github.com/olivere/elastic/v7"
 	"gopkg.in/yaml.v3"
 )
@@ -38,6 +39,7 @@ func init() {
 			Clients = new(clients)
 			Clients.mux = new(sync.RWMutex)
 			Clients.Clients = make(map[string]*elastic.Client)
+			manager.Register(Clients)
 		}
 	})
 }
@@ -55,10 +57,10 @@ func (c *clients) Setup(yamlCfg *yaml.Node) error {
 	if err != nil {
 		return err
 	}
-	Clients.mux.Lock()
-	defer Clients.mux.Unlock()
+	c.mux.Lock()
+	defer c.mux.Unlock()
 	for instName, cfg := range cfgs {
-		Clients.Clients[instName], err = elastic.NewClient(
+		c.Clients[instName], err = elastic.NewClient(
 			elastic.SetURL(cfg.URL),
 			elastic.SetSniff(cfg.Sniff),
 			elastic.SetHealthcheck(cfg.HealthCheck),

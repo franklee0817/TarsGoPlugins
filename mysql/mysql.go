@@ -66,10 +66,10 @@ func (m *clients) Setup(yamlCfg *yaml.Node) error {
 	if err != nil {
 		return err
 	}
-	Clients.mux.Lock()
-	defer Clients.mux.Unlock()
+	m.mux.Lock()
+	defer m.mux.Unlock()
 	for instName, cfg := range cfgs {
-		Clients.Engines[instName], err = xorm.NewEngine("mysql", buildDSN(cfg))
+		m.Engines[instName], err = xorm.NewEngine("mysql", buildDSN(cfg))
 		if err != nil {
 			return err
 		}
